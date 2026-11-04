@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+*.log
+*.tmp
+*.tgz
+.env*
+.npmrc
+.credentials*
+*.pem
+*.key
+*.p12
+*.pfx

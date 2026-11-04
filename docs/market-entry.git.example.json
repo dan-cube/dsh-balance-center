@@ -1,0 +1,43 @@
+{
+  "name": "dsh-balance-center",
+  "title": "dan-cube/dsh-balance-center",
+  "description": {
+    "en": "Manage model provider balances and subscription quotas in the DSH sidebar.",
+    "zh": "DSH 多平台模型余额与订阅额度显示管理插件。"
+  },
+  "icon": "https://raw.githubusercontent.com/dan-cube/dsh-balance-center/main/icon.svg",
+  "author": "dan-cube",
+  "homepage": "https://github.com/dan-cube/dsh-balance-center",
+  "repository": {
+    "url": "https://github.com/dan-cube/dsh-balance-center"
+  },
+  "metadata": {
+    "category": "usage",
+    "keywords": [
+      "dsh",
+      "balance",
+      "余额",
+      "模型",
+      "sidebar",
+      "quota",
+      "额度",
+      "订阅额度"
+    ],
+    "labels": [],
+    "sortKeys": {}
+  },
+  "versions": [
+    {
+      "version": "1.0.0",
+      "publishTimestamp": 0,
+      "source": {
+        "type": "git",
+        "url": "https://github.com/dan-cube/dsh-balance-center.git",
+        "commit": "<40-hex-commit>"
+      },
+      "engines": {
+        "dsh": ">=0.2.1-rc.5 <0.3.0-0"
+      }
+    }
+  ]
+}

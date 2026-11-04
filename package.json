@@ -1,0 +1,66 @@
+{
+  "name": "dsh-balance-center",
+  "version": "1.0.0",
+  "description": "DSH 多平台模型余额与订阅额度显示管理插件",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "balance",
+    "api-balance",
+    "sidebar",
+    "usage",
+    "quota",
+    "subscription",
+    "额度"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "docs/**",
+    "tools/**",
+    "README.md",
+    "README.zh.md",
+    "README.en.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "dsh": ">=0.2.1-rc.5 <0.3.0-0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-api-remotes"
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dan-cube/dsh-balance-center.git"
+  },
+  "homepage": "https://github.com/dan-cube/dsh-balance-center#readme",
+  "bugs": {
+    "url": "https://github.com/dan-cube/dsh-balance-center/issues"
+  },
+  "author": "dan-cube"
+}
