@@ -3,9 +3,12 @@
   <h1>DSH Balance &amp; Quota Center · 余额与额度</h1>
   <p><strong>Manage model provider balances and subscription quotas in the DSH sidebar.</strong></p>
   <p>
+    <strong><a href="https://github.com/dan-cube/dsh-balance-center/releases/download/v1.0.0/dsh-balance-center-1.0.0.tgz">Download v1.0.0 (.tgz)</a></strong> ·
+    <a href="#install">Installation guide</a> ·
+    <a href="#supported-sources-and-how-to-enable-them">Supported platforms</a>
+  </p>
+  <p>
     <a href="README.md">中文</a> · English ·
-    <a href="#install">Install</a> ·
-    <a href="#supported-sources-and-how-to-enable-them">Sources</a> ·
     <a href="#settings-page">Settings</a> ·
     <a href="#privacy-and-security">Privacy</a>
   </p>

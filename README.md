@@ -2,7 +2,12 @@
   <img src="icon.svg" width="72" alt="Balance Center 图标" />
   <h1>DSH 模型余额与额度中心 · DSH Balance &amp; Quota Center</h1>
   <p><strong>DSH 多平台模型余额与订阅额度显示管理插件</strong></p>
-  <p>中文 · <a href="README.en.md">English</a> · <a href="#安装">安装</a> · <a href="#支持清单与接入方式">支持清单</a></p>
+  <p>
+    <strong><a href="https://github.com/dan-cube/dsh-balance-center/releases/download/v1.0.0/dsh-balance-center-1.0.0.tgz">下载 v1.0.0（.tgz）</a></strong> ·
+    <a href="#安装">安装指南</a> ·
+    <a href="#支持清单与接入方式">支持平台</a>
+  </p>
+  <p>中文 · <a href="README.en.md">English</a></p>
 </div>
 
 在 DSH 侧边栏同时查看多个模型平台的余额与订阅额度，在设置页统一管理显示、排序、语言与刷新。
