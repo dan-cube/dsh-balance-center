@@ -43,6 +43,11 @@ const AMBIENT_REFS = {
   minimax: ['MINIMAX_API_KEY'],
   'minimax-cn': ['MINIMAX_CN_API_KEY'],
   'kimi-coding': ['KIMI_API_KEY'],
+  'opencode-go': ['OPENCODE_GO_API_KEY', 'OPENCODE_API_KEY'],
+  xiaomi: ['XIAOMI_API_KEY'],
+  'xiaomi-token-plan-cn': ['XIAOMI_TOKEN_PLAN_CN_API_KEY'],
+  'xiaomi-token-plan-ams': ['XIAOMI_TOKEN_PLAN_AMS_API_KEY'],
+  'xiaomi-token-plan-sgp': ['XIAOMI_TOKEN_PLAN_SGP_API_KEY'],
 }
 /** Route ids served by an adapter, with their fallback base URLs. */
 const ROUTE_ADAPTERS = {
@@ -56,6 +61,11 @@ const ROUTE_ADAPTERS = {
   minimax: 'minimax-quota',
   'minimax-cn': 'minimax-quota',
   'kimi-coding': 'kimi-quota',
+  'opencode-go': 'opencode-quota',
+  xiaomi: 'xiaomi-balance',
+  'xiaomi-token-plan-cn': 'xiaomi-quota',
+  'xiaomi-token-plan-ams': 'xiaomi-quota',
+  'xiaomi-token-plan-sgp': 'xiaomi-quota',
 }
 /** Hostname → adapter for declared (custom model API) routes. */
 const HOST_ADAPTERS = {
@@ -73,6 +83,10 @@ const HOST_ADAPTERS = {
   'api.minimax.io': 'minimax-quota',
   'api.minimaxi.com': 'minimax-quota',
   'api.kimi.com': 'kimi-quota',
+  'api.xiaomimimo.com': 'xiaomi-balance',
+  'token-plan-cn.xiaomimimo.com': 'xiaomi-quota',
+  'token-plan-ams.xiaomimimo.com': 'xiaomi-quota',
+  'token-plan-sgp.xiaomimimo.com': 'xiaomi-quota',
 }
 /** Fallback base URLs used when a route's profile carries none. */
 const FALLBACK_BASE = {
@@ -82,9 +96,18 @@ const FALLBACK_BASE = {
   openrouter: 'https://openrouter.ai/api/v1',
   stepfun: 'https://api.stepfun.com/v1',
   novita: 'https://api.novita.ai/v3',
+  xiaomi: 'https://api.xiaomimimo.com/v1',
 }
 /** Route ids that must never be read here: the shipped member balance owns them. */
 const SKIP_ROUTES = new Set(['deepseek-account'])
+/** Exact official HTTPS origins for Xiaomi MiMo adapters; checked before any key is attached. */
+const XIAOMI_BALANCE_ORIGIN = 'https://api.xiaomimimo.com'
+const XIAOMI_TOKEN_PLAN_ORIGINS = {
+  cn: 'https://token-plan-cn.xiaomimimo.com',
+  ams: 'https://token-plan-ams.xiaomimimo.com',
+  sgp: 'https://token-plan-sgp.xiaomimimo.com',
+}
+const XIAOMI_TOKEN_PLAN_ORIGIN_SET = new Set(Object.values(XIAOMI_TOKEN_PLAN_ORIGINS))
 /** Unauthenticated gateway fingerprint cache, keyed by origin. */
 const fingerprintCache = new Map()
 
@@ -224,6 +247,35 @@ function timestampOf(value) {
   const secondsOrMillis = numeric(raw)
   if (secondsOrMillis === undefined || secondsOrMillis <= 0) return undefined
   return secondsOrMillis < 1e12 ? secondsOrMillis * 1000 : secondsOrMillis
+}
+
+/** @returns the exact HTTPS origin when it is in the allowlist, or undefined. */
+function officialHttpsOrigin(candidate, allowedOrigins) {
+  if (candidate === undefined) return undefined
+  try {
+    const url = new URL(candidate)
+    if (url.protocol !== 'https:') return undefined
+    return allowedOrigins.has(url.origin) ? url.origin : undefined
+  } catch {
+    return undefined
+  }
+}
+
+/** @returns the Xiaomi Token Plan region selected by a route id. */
+function xiaomiRegionOf(id) {
+  if (id === 'xiaomi-token-plan-ams') return 'ams'
+  if (id === 'xiaomi-token-plan-sgp') return 'sgp'
+  return 'cn'
+}
+
+/** @returns epoch ms from a Xiaomi `YYYY-MM-DD HH:mm:ss` UTC string, or the generic timestamp. */
+function utcTimestampOf(value) {
+  const raw = text(value)
+  if (raw !== undefined && /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/.test(raw)) {
+    const parsed = Date.parse(`${raw.replace(' ', 'T')}Z`)
+    if (Number.isFinite(parsed)) return parsed
+  }
+  return timestampOf(value)
 }
 
 /** @returns the window length in minutes from a pi-ai style window object, or undefined. */
@@ -366,6 +418,66 @@ function parseKimiUsages(body) {
     kind: 'kimi-coding',
     planLevel: text(body?.user?.membership?.level),
     windows,
+  })
+}
+
+/** OpenCode Go: /zen/go/v1/usage windows (percent is used share, 0..100). */
+function parseOpencodeUsage(body) {
+  const usage = body !== null && typeof body === 'object' && body.usage !== null && typeof body.usage === 'object'
+    ? body.usage
+    : body
+  const windows = []
+  const add = (key, raw) => {
+    if (raw === null || typeof raw !== 'object') return
+    const used = percentOf(raw.percent)
+    if (used === undefined) return
+    windows.push({
+      key,
+      remainingPercent: Math.round((100 - used) * 100) / 100,
+      resetAt: timestampOf(raw.resetsAt),
+      ...raw.status === 'rate-limited' ? { note: 'rate-limited' } : {},
+    })
+  }
+  add('session', usage?.rolling)
+  add('week', usage?.weekly)
+  add('month', usage?.monthly)
+  return readyQuota({ kind: 'opencode', planLevel: text(body?.plan), windows })
+}
+
+/** Xiaomi MiMo pay-as-you-go: /v1/platform/balance (regular sk- key). */
+function parseXiaomiBalance(body) {
+  const wallets = Array.isArray(body?.balance_infos) ? body.balance_infos : []
+  const wallet = wallets.find((item) => item?.currency === 'CNY') ?? wallets[0]
+  if (wallet === null || typeof wallet !== 'object') return { status: 'unsupported' }
+  const amount = numeric(wallet.total_available) ?? numeric(wallet.cash_balance)
+  const detail = {}
+  const cash = numeric(wallet.cash_balance)
+  const gift = numeric(wallet.gift_balance)
+  const credit = numeric(wallet.credit_available)
+  if (cash !== undefined) detail.cash = cash
+  if (gift !== undefined) detail.gift = gift
+  if (credit !== undefined) detail.credit = credit
+  return ready(amount, wallet.currency === 'USD' ? 'USD' : 'CNY', Object.keys(detail).length === 0 ? undefined : detail)
+}
+
+/** Xiaomi MiMo Token Plan: /v1/platform/token_plan (dedicated tp- key). */
+function parseXiaomiTokenPlan(body) {
+  const quota = body?.quota
+  if (body?.object !== 'token_plan' || quota === null || typeof quota !== 'object') return { status: 'no_plan' }
+  const total = numeric(quota.total_credits)
+  const used = numeric(quota.used_credits)
+  const remaining = numeric(quota.remaining_credits) ?? (total !== undefined && used !== undefined ? total - used : undefined)
+  if (remaining === undefined && total === undefined) return { status: 'no_plan' }
+  return readyQuota({
+    kind: 'xiaomi',
+    planLevel: text(body?.plan_code),
+    windows: [{
+      key: 'month',
+      remaining,
+      total,
+      remainingPercent: remainingFromCounts(remaining, total),
+      resetAt: utcTimestampOf(body?.period?.end_at),
+    }],
   })
 }
 
@@ -529,6 +641,51 @@ async function readKimiQuota({ token, signal }) {
   return parseKimiUsages(result.body)
 }
 
+  /** OpenCode Go subscription usage; the current path falls back to the legacy one. */
+async function readOpencodeQuota({ token, signal }) {
+  const urls = [
+    'https://opencode.ai/inference/go/v1/usage',
+    'https://opencode.ai/zen/go/v1/usage',
+  ]
+  for (const [index, url] of urls.entries()) {
+    const result = await getJson(url, {
+      headers: { authorization: `Bearer ${token}`, 'user-agent': 'dsh-balance-center/1.1.0' },
+    }, signal)
+    if (index === 0 && (result.httpStatus === 404 || result.httpStatus === 405)) continue
+    if (result.kind !== 'ok') return failureOf(result)
+    return parseOpencodeUsage(result.body)
+  }
+  return { status: 'unsupported' }
+}
+
+  /** Xiaomi MiMo pay-as-you-go balance; only the exact official HTTPS origin may receive the key. */
+async function readXiaomiBalance({ key, baseURL, signal }) {
+  const explicit = text(baseURL)
+  const origin = explicit === undefined
+    ? XIAOMI_BALANCE_ORIGIN
+    : officialHttpsOrigin(explicit, new Set([XIAOMI_BALANCE_ORIGIN]))
+  if (origin === undefined) return { status: 'unsafe_endpoint' }
+  const result = await getJson(`${origin}/v1/platform/balance`, {
+    headers: { authorization: `Bearer ${key}` },
+  }, signal)
+  if (result.kind !== 'ok') return failureOf(result)
+  return parseXiaomiBalance(result.body)
+}
+
+  /** Xiaomi MiMo Token Plan credits; only an exact official HTTPS origin may receive the key. */
+async function readXiaomiQuota({ key, baseURL, id, signal }) {
+  const explicit = text(baseURL)
+  const origin = explicit === undefined
+    ? XIAOMI_TOKEN_PLAN_ORIGINS[xiaomiRegionOf(id)]
+    : officialHttpsOrigin(explicit, XIAOMI_TOKEN_PLAN_ORIGIN_SET)
+  if (origin === undefined) return { status: 'unsafe_endpoint' }
+  const result = await getJson(`${origin}/v1/platform/token_plan`, {
+    headers: { authorization: `Bearer ${key}` },
+  }, signal)
+  if (result.kind !== 'ok') return failureOf(result)
+  return parseXiaomiTokenPlan(result.body)
+}
+
 /**
  * Read the public gateway fingerprint once per origin.
  * @returns conversion info, or undefined when the origin is not a known gateway.
@@ -633,6 +790,8 @@ function familyOf(route) {
   if (route.id === 'kimi-coding') return 'kimi-coding'
   if (route.id === 'stepfun') return 'stepfun'
   if (route.id === 'novita') return 'novita'
+  if (route.id === 'opencode-go') return 'opencode'
+  if (route.id === 'xiaomi' || route.id.startsWith('xiaomi-token-plan-')) return 'xiaomi'
   const host = hostOf(route.baseURL)
   if (host === 'api.deepseek.com') return 'deepseek'
   if (host === 'api.moonshot.cn' || host === 'api.moonshot.ai') return 'kimi'
@@ -643,6 +802,8 @@ function familyOf(route) {
   if (host === 'api.z.ai' || host === 'open.bigmodel.cn' || host === 'bigmodel.cn') return 'glm'
   if (host === 'api.minimax.io' || host === 'api.minimaxi.com') return 'minimax'
   if (host === 'api.kimi.com') return 'kimi-coding'
+  if (host === 'api.xiaomimimo.com') return 'xiaomi'
+  if (host !== undefined && host.startsWith('token-plan-') && host.endsWith('.xiaomimimo.com')) return 'xiaomi'
   return route.declared === true ? 'gateway' : undefined
 }
 
@@ -664,6 +825,10 @@ function variantOf(route, currency) {
   if (route.id === 'minimax-cn' || host === 'api.minimaxi.com') return 'cn'
   if (route.id === 'stepfun' || host === 'api.stepfun.com') return 'cn'
   if (route.id === 'novita' || host === 'api.novita.ai') return 'intl'
+  if (route.id === 'xiaomi' || host === 'api.xiaomimimo.com') return 'cn'
+  if (route.id === 'xiaomi-token-plan-cn' || host === 'token-plan-cn.xiaomimimo.com') return 'cn'
+  if (route.id === 'xiaomi-token-plan-ams' || host === 'token-plan-ams.xiaomimimo.com') return 'ams'
+  if (route.id === 'xiaomi-token-plan-sgp' || host === 'token-plan-sgp.xiaomimimo.com') return 'sgp'
   return undefined
 }
 
@@ -738,12 +903,15 @@ async function readRoute(ctx, route, signal) {
     'glm-quota': readGlmQuota,
     'minimax-quota': readMinimaxQuota,
     'kimi-quota': readKimiQuota,
+    'opencode-quota': readOpencodeQuota,
+    'xiaomi-balance': readXiaomiBalance,
+    'xiaomi-quota': readXiaomiQuota,
   }
   const call = calls[adapter]
   let result
   try {
-    result = adapter === 'glm-quota' || adapter === 'minimax-quota' || adapter === 'kimi-quota'
-      ? await call({ token: credential.type === 'oauth' ? credential.access : credential.key, baseURL: route.baseURL, id: route.id, signal })
+    result = adapter === 'glm-quota' || adapter === 'minimax-quota' || adapter === 'kimi-quota' || adapter === 'opencode-quota' || adapter === 'xiaomi-quota'
+      ? await call({ token: credential.type === 'oauth' ? credential.access : credential.key, key: credential.key, baseURL: route.baseURL, id: route.id, signal })
       : await call({ key: credential.key, baseURL: route.baseURL, declared: route.declared, signal })
   } catch {
     result = { status: 'failed', message: 'request failed' }
@@ -882,6 +1050,13 @@ export const __test = {
   readGlmQuota,
   readMinimaxQuota,
   readKimiQuota,
+  readOpencodeQuota,
+  readXiaomiBalance,
+  readXiaomiQuota,
+  parseOpencodeUsage,
+  parseXiaomiBalance,
+  parseXiaomiTokenPlan,
+  utcTimestampOf,
   parseStepFunBalance,
   parseNovitaBalance,
   parseGlmQuota,

@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "DSH 模型余额与额度中心",
-    "description": "DSH 多平台模型余额与订阅额度显示管理插件。余额：DeepSeek、Kimi、OpenRouter、StepFun、Novita 与兼容中转站；额度：GLM Coding Plan、MiniMax Token Plan、Kimi For Coding。"
+    "description": "DSH 多平台模型余额与订阅额度显示管理插件。余额：DeepSeek、Kimi、OpenRouter、StepFun、Novita、Xiaomi MiMo 与兼容中转站；额度：GLM Coding Plan、MiniMax Token Plan、Kimi For Coding、OpenCode Go、Xiaomi MiMo Token Plan。"
   }
 }

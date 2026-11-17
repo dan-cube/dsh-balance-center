@@ -4,6 +4,53 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-11-17
+
+Adds two quota sources, DSH 0.2.2 UI integrations, low-balance alerts and account
+links.
+
+### Added
+
+- **OpenCode Go** subscription quota — `GET https://opencode.ai/inference/go/v1/usage`
+  (falls back to `/zen/go/v1/usage`), Bearer API key, rolling / weekly / monthly
+  windows. The upstream `percent` is the used share; rows show the remaining share.
+- **Xiaomi MiMo** support — pay-as-you-go balance via
+  `GET /v1/platform/balance` and Token Plan credits via
+  `GET /v1/platform/token_plan` for the CN / AMS / SGP regions.
+- **Models page integration** — balance/quota summaries in provider cards and a
+  footer summary with refresh, through `settings.models.provider-card` and
+  `settings.models.footer`.
+- **General settings row** — toggle the sidebar rows and configure low-balance /
+  low-quota alerts without opening the plugin page.
+- **Navigation icon** for the settings section via `settings.section.icon`.
+- **Low-balance / low-quota alerts** shown in the frame-wide overlay
+  (`shell.overlay`), with ¥ and % thresholds.
+- **Account links** — top-up and usage shortcuts from the account `getState()`
+  links; account state changes refresh the snapshot.
+- Sidebar visibility master switch (preference `sidebarEnabled`).
+
+### Security
+
+- Xiaomi MiMo adapters validate the request target against the exact official
+  HTTPS origin allowlist before attaching a DSH credential; an explicit
+  non-official or non-HTTPS address returns the `unsafe_endpoint` status and
+  sends no request (official regional fallbacks remain when no explicit address
+  is configured).
+
+### Changed
+
+- Verified on DSH `0.2.2-rc.3`; the README compatibility and verification scope
+  were updated (the plugin was already compatible with the new account and
+  provider APIs).
+- `engines.dsh` still declares `>=0.2.1-rc.5 <0.3.0-0`; 0.2.2 is now tested.
+
+### Known limitations
+
+- OpenCode Go and Xiaomi MiMo adapters are validated with interface fixtures, not
+  live accounts in this release.
+- Qwen Token Plan is not supported: the inference key cannot read the console
+  quota gateway (it needs console cookies or cloud AK/SK).
+
 ## [1.0.0] - 2026-11-04
 
 Initial public release: model provider balances and subscription quotas in the

@@ -213,7 +213,7 @@ if (exists('client.js')) {
       remote: { $on: () => () => {} },
     }
     plugin.apply(ctx)
-    for (const expected of ['sidebar.footer.action', 'settings.section']) {
+    for (const expected of ['sidebar.footer.action', 'settings.section', 'settings.models.provider-card', 'settings.models.footer', 'settings.general.item', 'settings.section.icon', 'shell.overlay']) {
       if (!slots.includes(expected)) fail(`client plugin did not register into ${expected}`)
     }
     ok(`client plugin applies and registers: ${slots.join(', ')}`)
@@ -293,6 +293,64 @@ try {
 
       if (test.parseGlmQuota({ code: 500, success: false, msg: '无套餐' }).status === 'no_plan') ok('GLM no-plan response mapped')
       else fail('GLM no-plan response should map to no_plan')
+
+      // OpenCode Go usage: percent is the used share, so remaining = 100 - percent.
+      queue.push({ body: { usage: {
+        rolling: { status: 'ok', percent: 52, resetsAt: '2026-11-17T10:00:00Z' },
+        weekly: { status: 'ok', percent: 20, resetsAt: '2026-11-20T00:00:00Z' },
+        monthly: { status: 'ok', percent: 61, resetsAt: '2026-12-17T00:00:00Z' },
+      } } })
+      const opencode = await test.readOpencodeQuota({ token: 'oc-key', signal })
+      const opencodeSession = opencode.quota?.windows?.find((window) => window.key === 'session')
+      const opencodeMonth = opencode.quota?.windows?.find((window) => window.key === 'month')
+      if (opencode.status === 'ready' && opencodeSession?.remainingPercent === 48 && opencodeMonth?.remainingPercent === 39) ok('OpenCode Go quota adapter')
+      else fail('OpenCode Go quota adapter did not invert used percent correctly')
+      if (calls.at(-1)?.url === 'https://opencode.ai/inference/go/v1/usage' && calls.at(-1)?.headers?.authorization === 'Bearer oc-key') ok('OpenCode Go request shape')
+      else fail('OpenCode Go request URL/header changed')
+
+      // Xiaomi MiMo Token Plan credits (regional endpoint from the route id).
+      queue.push({ body: { object: 'token_plan', plan_code: 'pro', period: { start_at: '2026-09-21 23:59:59', end_at: '2027-09-21 23:59:59' }, quota: { total_credits: 10000000, used_credits: 1500000, remaining_credits: 8500000 } } })
+      const xiaomiQuota = await test.readXiaomiQuota({ key: 'xm-key', baseURL: undefined, id: 'xiaomi-token-plan-ams', signal })
+      const xiaomiMonth = xiaomiQuota.quota?.windows?.[0]
+      if (xiaomiQuota.status === 'ready' && xiaomiMonth?.key === 'month' && xiaomiMonth?.remainingPercent === 85 && xiaomiMonth?.remaining === 8500000) ok('Xiaomi MiMo Token Plan quota adapter')
+      else fail('Xiaomi MiMo Token Plan quota adapter did not parse the credits fixture')
+      if (calls.at(-1)?.url === 'https://token-plan-ams.xiaomimimo.com/v1/platform/token_plan' && calls.at(-1)?.headers?.authorization === 'Bearer xm-key') ok('Xiaomi Token Plan regional request shape')
+      else fail('Xiaomi Token Plan request URL/header changed')
+
+      // Xiaomi MiMo pay-as-you-go balance (regular sk- key).
+      queue.push({ body: { object: 'balance', is_available: true, balance_infos: [{ currency: 'CNY', cash_balance: '100.50', gift_balance: '20.00', frozen_balance: '0.00', credit_limit: '500.00', credit_available: '380.00', total_available: '500.50' }] } })
+      const xiaomiBalance = await test.readXiaomiBalance({ key: 'xm-sk', baseURL: undefined, declared: false, signal })
+      if (xiaomiBalance.status === 'ready' && xiaomiBalance.amount === 500.5 && xiaomiBalance.currency === 'CNY') ok('Xiaomi MiMo balance adapter')
+      else fail('Xiaomi MiMo balance adapter did not parse the balance fixture')
+      if (calls.at(-1)?.url === 'https://api.xiaomimimo.com/v1/platform/balance') ok('Xiaomi balance request shape')
+      else fail('Xiaomi balance request URL changed')
+
+      // Xiaomi adapters must validate the exact official HTTPS target before
+      // attaching a key; rejected endpoints must make no request at all.
+      const rejectStart = calls.length
+      const httpBalance = await test.readXiaomiBalance({ key: 'dummy', baseURL: 'http://api.xiaomimimo.com/v1', declared: false, signal })
+      const lookalikeBalance = await test.readXiaomiBalance({ key: 'dummy', baseURL: 'https://api.xiaomimimo.com.evil.example/v1', declared: false, signal })
+      const evilQuota = await test.readXiaomiQuota({ key: 'dummy', baseURL: 'https://token-plan-evil.xiaomimimo.com/v1', id: 'xiaomi-token-plan-cn', signal })
+      if ([httpBalance, lookalikeBalance, evilQuota].every((result) => result.status === 'unsafe_endpoint') && calls.length === rejectStart) {
+        ok('Xiaomi rejects non-official HTTPS targets without any request')
+      } else {
+        fail('Xiaomi accepted an unsafe endpoint or sent a request')
+      }
+
+      // Existing CN / AMS / SGP regional fallbacks still work when no explicit
+      // address is configured.
+      for (const [region, id] of [['cn', 'xiaomi-token-plan-cn'], ['ams', 'xiaomi-token-plan-ams'], ['sgp', 'xiaomi-token-plan-sgp']]) {
+        queue.push({ body: { object: 'token_plan', plan_code: 'pro', period: { end_at: '2027-09-21 23:59:59' }, quota: { total_credits: 100, used_credits: 10, remaining_credits: 90 } } })
+        const regional = await test.readXiaomiQuota({ key: 'dummy', baseURL: undefined, id, signal })
+        if (regional.status === 'ready' && calls.at(-1)?.url === `https://token-plan-${region}.xiaomimimo.com/v1/platform/token_plan`) ok(`Xiaomi ${region.toUpperCase()} fallback stays official`)
+        else fail(`Xiaomi ${region.toUpperCase()} fallback changed`)
+      }
+
+      // An explicit official region origin is still accepted.
+      queue.push({ body: { object: 'token_plan', plan_code: 'pro', period: { end_at: '2027-09-21 23:59:59' }, quota: { total_credits: 100, used_credits: 10, remaining_credits: 90 } } })
+      const explicitQuota = await test.readXiaomiQuota({ key: 'dummy', baseURL: 'https://token-plan-sgp.xiaomimimo.com/v1', id: 'xiaomi-token-plan-cn', signal })
+      if (explicitQuota.status === 'ready' && calls.at(-1)?.url === 'https://token-plan-sgp.xiaomimimo.com/v1/platform/token_plan') ok('Xiaomi accepts an explicit official HTTPS origin')
+      else fail('Xiaomi rejected an allowed official origin')
 
       // Provider business errors must not echo upstream text either.
       queue.push({ body: { code: 500, message: 'AUDIT_MSG_SENTINEL' } })

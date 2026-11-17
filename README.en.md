@@ -3,7 +3,7 @@
   <h1>DSH Balance &amp; Quota Center · 余额与额度</h1>
   <p><strong>Manage model provider balances and subscription quotas in the DSH sidebar.</strong></p>
   <p>
-    <strong><a href="https://github.com/dan-cube/dsh-balance-center/releases/download/v1.0.0/dsh-balance-center-1.0.0.tgz">Download v1.0.0 (.tgz)</a></strong> ·
+    <strong><a href="https://github.com/dan-cube/dsh-balance-center/releases/download/v1.1.0/dsh-balance-center-1.1.0.tgz">Download v1.1.0 (.tgz)</a></strong> ·
     <a href="#install">Installation guide</a> ·
     <a href="#supported-sources-and-how-to-enable-them">Supported platforms</a>
   </p>
@@ -23,23 +23,27 @@ actually read are listed.
 
 ## Screenshots
 
-These are real DSH captures. Account details, actual balances, quotas and reset
-times are covered; private conversations and paths are cropped out. No fictional
-amounts replace the original values. PNG metadata has been removed.
+Screenshots from the running DSH app. The sidebar balance values are masked.
 
 
-### Sidebar rows
-
-![Sidebar balance and quota rows, with private values covered](docs/screenshots/sidebar.png)
-
-### Settings and About
-
-![About, privacy and release information in the native DSH settings page](docs/screenshots/settings.png)
+| Sidebar rows | About: privacy and version |
+|---|---|
+| ![Sidebar balance rows](docs/screenshots/sidebar.png) | ![Balance Center settings](docs/screenshots/settings.png) |
 
 ## What it looks like
 
-Balance rows use `DeepSeek 余额：<amount>` or `Kimi 余额：<amount>`;
-subscription rows use `Kimi Coding 额度：剩余 <percent>% · <reset time>`.
+```
+┌──────────────────────────────────┐
+│  … session list …                │
+│                                  │
+│  DeepSeek 余额：¥100.00          │
+│  Kimi 余额：¥50.00               │
+│  OpenRouter 余额：$10.00         │
+│  SiliconFlow 余额：¥25.00       │
+│                                  │
+│  (avatar)  DeepSeek Account  ⋯   │
+└──────────────────────────────────┘
+```
 
 Each source is one row in the form `Name：currencySymbol+amount`, left aligned,
 with the amount emphasised. Currency comes from the provider response (`¥`, `$`,
@@ -82,6 +86,14 @@ balance shows `<¥0.01`, and negative debt is rounded with its sign kept.
   the saved credential — an unsaved key is never sent; authenticated custom
   endpoints must use HTTPS (localhost excepted).
 - **Bilingual** — all page copy and labels ship in Chinese and English.
+- **Models-page integration** — every provider card shows a balance/quota summary,
+  and the Models page gets a footer summary with its own refresh.
+- **General-settings shortcut** — a General settings row toggles the sidebar rows and
+  configures low-balance/low-quota alerts.
+- **Top-up links** — when the DSH account is signed in, the settings page links to
+  top-up and usage pages.
+- **DSH 0.2.2 ready** — verified on `0.2.2-rc.3`; uses the newer Models-card,
+  General-settings, navigation-icon and overlay extension points.
 - **Theme-native** — only `--dsw-alias-*` theme tokens; works in light and dark.
 
 ## Language
@@ -107,6 +119,7 @@ is a balance center and a quota center.
 | OpenRouter | management or inference key | `openrouter.ai` → Keys | account credits, or that key’s remaining limit |
 | StepFun | API key | `platform.stepfun.com` | `StepFun 余额：¥xx` |
 | Novita AI | API key | `novita.ai` → API keys | `Novita 余额：$xx` |
+| Xiaomi MiMo (pay-as-you-go) | API key (`sk-`) | `platform.xiaomimimo.com` → API key | `Xiaomi MiMo 余额：¥xx` (official HTTPS endpoint only) |
 | one-api / new-api relay | API key | your relay console | balance or quota |
 | Custom JSON source | any (or none) | your own JSON endpoint | configured field + currency |
 
@@ -117,11 +130,13 @@ is a balance center and a quota center.
 | GLM Coding Plan (Z.ai / BigModel) | Coding Plan API key | `z.ai` / `bigmodel.cn` console after subscribing | `GLM Coding 额度：剩余 56% · 2h31m`, with 5h / weekly / tools windows and plan tier |
 | MiniMax Token Plan | API key | `platform.minimaxi.com` / `platform.minimax.io` | `MiniMax 额度：剩余 75% · …` |
 | Kimi For Coding (Kimi Code membership) | membership API key | [Kimi Code console](https://www.kimi.com/code/console) after subscribing (max 5 keys, shown once) | `Kimi Coding 额度：剩余 100% · …`, with 5h / weekly windows |
+| OpenCode Go | API key | OpenCode Console or `OPENCODE_GO_API_KEY` | `OpenCode Go 额度：剩余 48% · …`, with rolling 5h / weekly / monthly windows |
+| Xiaomi MiMo Token Plan | Token Plan API key (`tp-`) | `platform.xiaomimimo.com` → Token Plan | `Xiaomi MiMo 额度：剩余 85% · …` (CN / AMS / SGP; official HTTPS endpoint only) |
 
 ### How to enable
 
 1. **Balances** — add the provider in DSH **Settings → Models** and fill its API key (or sign in to DeepSeek). The plugin detects it automatically; use **Add custom balance source** for any other JSON endpoint.
-2. **Subscription quotas** — subscribe to the matching plan, then add `zai` / `zai-coding-cn` / `minimax` / `minimax-cn` / `kimi-coding` under **Third-party model providers** with the membership API key. The plugin calls the quota endpoint with that key — no OAuth and no switch to per-token platform keys.
+2. **Subscription quotas** — subscribe to the matching plan, then add `zai` / `zai-coding-cn` / `minimax` / `minimax-cn` / `kimi-coding` / `opencode-go` / `xiaomi-token-plan-cn` / `xiaomi-token-plan-ams` / `xiaomi-token-plan-sgp` under **Third-party model providers** with the membership API key. The plugin calls the quota endpoint with that key — no OAuth and no switch to per-token platform keys.
 3. **Providers without a balance endpoint** (OpenAI, Anthropic, Gemini, Alibaba/Qwen, Volcengine/Ark, Baidu/Qianfan, Tencent/Hunyuan, Groq, Together, …) expose usage/billing APIs only; they are not listed. Use a custom source when they offer a JSON endpoint.
 4. **SiliconFlow** — the vendor retired `/user/info` on 2026-08-14 (live HTTP 410), so it stays unsupported until a replacement appears; use a custom source for a self-hosted relay.
 
@@ -174,70 +189,61 @@ between **模型** and **内置插件**.
   shown in the sidebar (no interface, no key, no plan, expired sign-in), with the
   reason; rejected keys and network failures stay in the sources list instead.
 - **Add custom balance source** — name, GET URL, authentication, API key, JSON
-  field path, currency; save a new key first, then **Test connection** uses the
-  saved credential.
+  field path, currency; **Test connection** before saving.
+- **General settings** — a single row toggles the sidebar rows and configures
+  low-balance/low-quota alerts plus their thresholds.
+- **Models page** — each configured provider card shows that source's balance or
+  quota summary; the page footer adds a summary with its own refresh button.
+- **Low-balance alerts** — enable them in General settings, choose a ¥ threshold
+  (5/10/20/50/100) and a quota threshold (5/10/20/30%); triggers appear in the
+  bottom-right overlay and can be dismissed. Alerts are local only.
+- **Account links** — when the DSH account is signed in, the settings page links
+  to the vendor's top-up and usage pages.
+
+
 
 Preferences are stored in browser `localStorage`; custom-source secrets are stored
 via the Harness credential service under generated `BALANCE_CENTER_*` references.
 
 ## Verification scope
 
-- **Verified live** (DSH `0.2.1-rc.5` on the maintainer machine): DeepSeek balance, Kimi / Moonshot balance, Kimi For Coding quota, sidebar rows, settings page, show/hide and ordering, Chinese/English switching, and the SiliconFlow HTTP 410 explanation.
-- **Verified with interface fixtures**: StepFun, Novita, GLM Coding Plan and MiniMax Token Plan request URLs, auth headers and parsing; Kimi returning both a short-cycle and a weekly window; upstream error-text redaction; custom-source "Test connection" not writing saved credentials.
-- **Not verified**: StepFun / Novita / GLM / MiniMax against real accounts; DSH 0.3.x; the SiliconFlow replacement API (not published yet).
+- **Verified live** (DSH `0.2.2-rc.3` on the maintainer machine): DeepSeek balance, Kimi / Moonshot balance, Kimi For Coding quota, sidebar rows, settings page, show/hide and ordering, Chinese/English switching, SiliconFlow HTTP 410 explanation, Models-page cards/footer, General-settings row, navigation icon, low-balance overlay, and top-up/usage links.
+- **Verified with interface fixtures**: StepFun, Novita, GLM Coding Plan, MiniMax Token Plan, OpenCode Go and Xiaomi MiMo (balance and Token Plan) request URLs, auth headers and parsing; Kimi returning both a short-cycle and a weekly window; upstream error-text redaction; custom-source "Test connection" not writing saved credentials.
+- **Not verified**: StepFun, Novita, GLM, MiniMax, OpenCode Go and Xiaomi MiMo against real accounts (interface fixtures only); DSH 0.3.x; the SiliconFlow replacement API (not published yet).
 
 Development check: `node tools/check.mjs --strict`.
 
 ## Install
 
-Release: **1.0.0**. This release is distributed through GitHub; npm publication is deferred.
-[GitHub Release](https://github.com/dan-cube/dsh-balance-center/releases/tag/v1.0.0) ·
-[Download the .tgz package](https://github.com/dan-cube/dsh-balance-center/releases/download/v1.0.0/dsh-balance-center-1.0.0.tgz).
+[GitHub Release v1.1.0](https://github.com/dan-cube/dsh-balance-center/releases/tag/v1.1.0) · [Download the .tgz](https://github.com/dan-cube/dsh-balance-center/releases/download/v1.1.0/dsh-balance-center-1.1.0.tgz)
 
 Balance & Quota Center is a DSH bundle: a Host half plus a browser half.
-Install it through DSH; a standalone `npm install` does not load it into DSH.
 
 **From the Plugins page (recommended for most users)**
 
 1. Open **Plugins** in the DSH sidebar.
-2. Choose **Add plugin**, paste `git+https://github.com/dan-cube/dsh-balance-center.git#v1.0.0`, and install. You can also download the Release `.tgz` and install it using its absolute local path.
-3. Enable the bundle when asked, then open **Settings → Balance & Quota**.
+2. Choose **Add plugin** and paste `git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0`, or download the Release tarball and enter its absolute local path.
+3. Enable the bundle and restart DSH. Open **Settings → Balance & Quota**.
 
 **From the CLI**
 
 ```sh
-# Desktop packaged app (profile is usually "desktop")
-dsh plugin --profile desktop add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.0.0'
+# DSH desktop app
+dsh plugin --profile desktop add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'
 
-# npm-based dsh web (profile is usually "web")
-dsh plugin --profile web add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.0.0'
+# DSH Web
+dsh plugin --profile web add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'
 
-# From a downloaded Release package (replace with the actual absolute path)
-dsh plugin --profile desktop add /absolute/path/to/dsh-balance-center-1.0.0.tgz
-
-# Local development link (code changes take effect after a recompose/restart)
-dsh plugin --profile desktop add link:/absolute/path/to/dsh-balance-center
+# From a downloaded Release asset, using its actual path
+dsh plugin --profile desktop add /absolute/path/to/dsh-balance-center-1.1.0.tgz
 ```
 
-After a fresh install of the Host half, restart DSH once (or let the profile
-recompose through HMR) so the Host route `/api/balance-center` is mounted.
-The sidebar rows need no restart. For the `desktop` profile, use the command
-installed by the DSH desktop app; the npm-installed CLI manages Web/custom
-profiles and does not manage the desktop profile.
+For the desktop profile, use the `dsh` command installed by the desktop app.
+If you use a custom profile, replace `desktop` or `web` with its name.
 
 ### Upgrade and uninstall
 
-```sh
-# To upgrade, replace the tag with the new GitHub Release version (use web for Web)
-dsh plugin --profile desktop add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.0.0'
-
-# Uninstall
-dsh plugin --profile desktop remove dsh-balance-center
-```
-
-Restart DSH after either operation. You can also uninstall and reinstall from
-the Plugins page. Local display preferences remain in the browser until storage
-is cleared.
+To upgrade from 1.0.0, remove the older version from the Plugins page and install 1.1.0 using the steps above. Restart DSH and verify the version in **Settings → Balance & Quota → About**. Display preferences in the same profile typically carry over unless you clear browser storage.
 
 ## How it works
 
@@ -269,7 +275,7 @@ In short: **the plugin has no server, collects nothing and uploads nothing; your
 - Authenticated custom sources must use HTTPS (localhost excepted), so a key is never sent to a cleartext remote endpoint.
 - No telemetry, analytics or third-party reporting. The plugin stores nothing of its own: display preferences stay in browser storage, keys stay in the DSH credential store and can be deleted there.
 
-Screenshots in this README show real DSH with account details and balance/quota values covered. When reporting an issue, please mask API keys, account names, real balances, private conversations and local paths.
+The screenshots are cropped or redacted to protect private details. When reporting an issue, please mask API keys, account names, real balances, private conversations and local paths.
 
 ## Compatibility
 
@@ -308,4 +314,4 @@ MIT — see [LICENSE](LICENSE).
 
 ---
 
-Maintainer: dan-cube · Version 1.0.0 · Updated 2026-11-04
+Maintainer: dan-cube · Version 1.1.0 · Updated 2026-11-17

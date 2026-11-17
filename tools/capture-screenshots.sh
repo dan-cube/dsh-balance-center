@@ -10,7 +10,7 @@ printf 'Press Enter, then click the DSH window: '
 read -r _
 screencapture -x -o -w docs/screenshots/sidebar.png
 
-echo "[2/2] Open Settings → 余额与额度 → 说明 in DSH."
+echo "[2/2] Open Settings → 余额与额度 in DSH."
 printf 'Press Enter, then click the DSH window: '
 read -r _
 screencapture -x -o -w docs/screenshots/settings.png

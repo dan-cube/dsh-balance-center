@@ -37,7 +37,7 @@ window.__ModuleLoader__.load({
       nav: '余额与额度',
       title: '模型余额与额度',
       aboutName: 'DSH 模型余额与额度中心',
-      subtitle: '在侧边栏账号上方显示 DeepSeek 余额、已接入的模型 API 余额，以及订阅套餐额度。',
+      subtitle: '在侧边栏显示各平台余额与订阅额度，并同步到「模型」页、通用设置和低余额提醒。',
       sectionSources: '余额来源',
       sectionGeneral: '通用设置',
       sectionHelp: '说明',
@@ -87,19 +87,41 @@ window.__ModuleLoader__.load({
       aboutSupport: '1. 支持余额 / 额度',
       aboutApiLabel: 'API 余额',
       aboutMembershipLabel: '会员额度',
-      aboutApiList: 'DeepSeek（账号登录 / 官方 API Key）、Kimi / Moonshot、OpenRouter、StepFun、Novita、one-api / new-api 中转站、自定义 JSON 接口。',
-      aboutMembershipList: 'GLM Coding Plan（Z.ai / 智谱）、MiniMax Token Plan（国内 / 国际）、Kimi For Coding（Kimi Code 会员 Key 或 DSH 登录态）。',
+      aboutApiList: 'DeepSeek（账号登录 / 官方 API Key）、Kimi / Moonshot、OpenRouter、StepFun、Novita、Xiaomi MiMo、one-api / new-api 中转站、自定义 JSON 接口。',
+      aboutMembershipList: 'GLM Coding Plan（Z.ai / 智谱）、MiniMax Token Plan（国内 / 国际）、Kimi For Coding（Kimi Code）、OpenCode Go、Xiaomi MiMo Token Plan（CN / AMS / SGP）。',
       aboutUnsupported: '2. 暂不支持',
-      aboutUnsupportedList: 'SiliconFlow（官方接口已下线）、OpenAI、Anthropic、Gemini、阿里云百炼 / 通义、火山方舟、百度千帆、腾讯混元、讯飞星火、Groq、Together、Fireworks、Mistral、ModelScope 等；这些平台没有普通 API Key 可读的余额接口。',
+      aboutUnsupportedList: 'SiliconFlow（官方接口已下线）、OpenAI、Anthropic、Gemini、阿里云百炼 / 通义（含千问 Token Plan，需控制台 Cookie / AK-SK）、火山方舟、百度千帆、腾讯混元、讯飞星火、Groq、Together、Fireworks、Mistral、ModelScope 等；这些平台没有普通 API Key 可读的余额接口。',
       aboutHow: '3. 实现方式',
-      aboutHowText: '用各平台的 API Key 或会员 Key 直接查询对应的官方余额 / 额度接口；自定义源会请求你填写的地址。额度以「剩余 % · 重置时间」显示，不是充值余额；点「立即刷新」会重新读取最新数据。',
+      aboutHowText: '用各平台的 API Key 或会员 Key 直接查询对应的官方余额 / 额度接口；小米 MiMo 适配器仅向小米官方 HTTPS 地址发起鉴权请求；自定义源会请求你填写的地址。额度以「剩余 % · 重置时间」显示，不是充值余额。新版本还会在「设置 → 模型」的卡片与底部、以及「设置 → 通用设置」中展示，并支持低余额 / 低额度提醒和账号充值/用量链接；点「立即刷新」会重新读取最新数据。',
       aboutPrivacy: '4. 隐私保护',
-      aboutPrivacyText: '密钥只保存在本机 DSH 凭据库，由本机宿主在查询时读取，用于向对应平台（自定义源为你填写的地址）发起请求；插件本身没有服务器，不收集、不上传任何数据。浏览器只收到状态与数字；未保存的密钥不会发送，测试连接只使用已保存凭据，鉴权自定义源要求 HTTPS（本机地址除外）。',
+      aboutPrivacyText: '密钥只保存在本机 DSH 凭据库，由本机宿主在查询时读取，用于向对应平台（自定义源为你填写的地址）发起请求；插件本身没有服务器，不收集、不上传任何数据。浏览器只收到状态与数字；未保存的密钥不会发送，测试连接只使用已保存凭据，鉴权自定义源要求 HTTPS（本机地址除外）。提醒只在本机界面显示；「充值 / 用量」链接会打开对应平台的网页。',
       aboutVersion: '5. 版本信息',
       aboutMeta: 'v{version} · 开发者 {author} · 更新于 {updated}',
-      aboutScope: '验证范围：DeepSeek、Kimi 余额与 Kimi For Coding 额度已实机验证；StepFun、Novita、GLM、MiniMax 适配器已通过接口 fixtures，未在真实账号复现。',
+      aboutScope: '验证范围：DeepSeek、Kimi 余额与 Kimi For Coding 额度已实机验证；StepFun、Novita、GLM、MiniMax、OpenCode Go、Xiaomi MiMo 适配器已通过接口 fixtures，未在真实账号复现。',
       aboutGitHub: 'GitHub',
+      cardBalance: '余额：{value}',
+      cardQuota: '额度：{value}',
+      cardUnavailable: '暂无余额数据',
+      modelsFooterTitle: '余额与额度',
+      modelsFooterEmpty: '暂无可读取的来源',
+      modelsFooterRefresh: '刷新',
+      generalSidebarLabel: '在侧边栏显示余额与额度',
+      generalSidebarHint: '关闭后侧边栏不再显示，设置页和「模型」页仍可查看。',
+      alertsEnabled: '低余额 / 低额度提醒',
+      alertsEnabledHint: '余额或额度低于阈值时在窗口右下角提醒。',
+      alertMoneyThreshold: '低余额阈值',
+      alertQuotaThreshold: '低额度阈值',
+      alertMoneyOption: '¥{n}',
+      alertPercentOption: '{n}%',
+      alertLowBalance: '{name}偏低：{value}',
+      alertLowQuota: '{name}偏低：剩余 {percent}%',
+      alertDismiss: '关闭',
+      accountTopUp: '充值',
+      accountUsage: '用量',
       labelGlm: 'GLM Coding',
+      labelOpencode: 'OpenCode Go',
+      labelXiaomi: 'Xiaomi MiMo',
+      variantSuffix: '（{variant}）',
       labelMinimax: 'MiniMax',
       labelKimiCoding: 'Kimi Coding',
       labelStepfun: 'StepFun',
@@ -115,6 +137,7 @@ window.__ModuleLoader__.load({
       daysHours: '{n} 天 {h} 小时',
       statusNoPlan: '无订阅套餐',
       statusSigninExpired: '订阅登录已过期，请重新登录',
+      statusUnsafeEndpoint: '连接地址不是官方 HTTPS 地址，已跳过请求',
       statusApiRetired: '官方余额接口已下线（HTTP {status}）',
       statusFailedHttp: '读取失败（HTTP {status}）',
       sectionUnavailable: '检测到的其他连接',
@@ -123,6 +146,7 @@ window.__ModuleLoader__.load({
       detailWindow5h: '5 小时池剩余 {value}',
       detailWindowWeek: '周池剩余 {value}',
       detailWindowTools: '工具额度剩余 {value}',
+      detailWindowMonth: '月额度剩余 {value}',
       resettingNow: '即将重置',
       errorInvalidUrl: '接口地址无效',
       errorJsonPath: 'JSON 字段路径没有取到数字',
@@ -174,7 +198,7 @@ window.__ModuleLoader__.load({
       nav: 'Balance & Quota',
       title: 'Balance & Quota',
       aboutName: 'DSH Balance & Quota Center',
-      subtitle: 'Shows DeepSeek, model API balances and subscription quotas above the sidebar account row.',
+      subtitle: 'Shows balances and subscription quotas in the sidebar, Models page, General settings and low-balance alerts.',
       sectionSources: 'Balance sources',
       sectionGeneral: 'General',
       sectionHelp: 'About',
@@ -224,19 +248,41 @@ window.__ModuleLoader__.load({
       aboutSupport: '1. Balances & quotas',
       aboutApiLabel: 'API balances',
       aboutMembershipLabel: 'Membership quotas',
-      aboutApiList: 'DeepSeek (account login / official API key), Kimi / Moonshot, OpenRouter, StepFun, Novita, one-api / new-api relays, custom JSON endpoints.',
-      aboutMembershipList: 'GLM Coding Plan (Z.ai / BigModel), MiniMax Token Plan (CN / Intl), Kimi For Coding (Kimi Code membership key or DSH sign-in).',
+      aboutApiList: 'DeepSeek (account login / official API key), Kimi / Moonshot, OpenRouter, StepFun, Novita, Xiaomi MiMo, one-api / new-api relays, custom JSON endpoints.',
+      aboutMembershipList: 'GLM Coding Plan (Z.ai / BigModel), MiniMax Token Plan (CN / Intl), Kimi For Coding (Kimi Code), OpenCode Go, Xiaomi MiMo Token Plan (CN / AMS / SGP).',
       aboutUnsupported: '2. Not supported',
-      aboutUnsupportedList: 'SiliconFlow (retired API), OpenAI, Anthropic, Gemini, Alibaba Bailian / Qwen, Volcengine Ark, Baidu Qianfan, Tencent Hunyuan, iFlytek Spark, Groq, Together, Fireworks, Mistral, ModelScope and similar — no ordinary-API-key balance endpoint.',
+      aboutUnsupportedList: 'SiliconFlow (retired API), OpenAI, Anthropic, Gemini, Alibaba Bailian / Qwen (Qwen Token Plan needs console cookies or AK/SK), Volcengine Ark, Baidu Qianfan, Tencent Hunyuan, iFlytek Spark, Groq, Together, Fireworks, Mistral, ModelScope and similar — no ordinary-API-key balance endpoint.',
       aboutHow: '3. How it works',
-      aboutHowText: 'Queries the matching official balance or quota endpoint with each vendor’s API key or membership key; custom sources request the URL you enter. Quotas show as “X% left · reset in …”, not top-up balances; “Refresh now” re-reads the latest data.',
+      aboutHowText: 'Queries the matching official balance or quota endpoint with each vendor’s API key or membership key; Xiaomi MiMo adapters send authenticated requests only to Xiaomi’s official HTTPS endpoints; custom sources request the URL you enter. Quotas show as “X% left · reset in …”, not top-up balances. The current version also shows them in Settings → Models cards/footer and Settings → General, with low-balance alerts and account top-up/usage links; “Refresh now” re-reads the latest data.',
       aboutPrivacy: '4. Privacy',
-      aboutPrivacyText: 'Keys stay in the local DSH credential store and are read by the local Host when a query runs, only to call the matching vendor (or the URL you enter for a custom source). The plugin has no server and collects or uploads nothing. The browser receives status and numbers only; unsaved keys are never sent, Test connection uses saved credentials only, and authenticated custom sources must use HTTPS (localhost excepted).',
+      aboutPrivacyText: 'Keys stay in the local DSH credential store and are read by the local Host when a query runs, only to call the matching vendor (or the URL you enter for a custom source). The plugin has no server and collects or uploads nothing. The browser receives status and numbers only; unsaved keys are never sent, Test connection uses saved credentials only, and authenticated custom sources must use HTTPS (localhost excepted). Alerts stay in the local UI; top-up/usage links open the vendor’s website.',
       aboutVersion: '5. Version',
       aboutMeta: 'v{version} · by {author} · updated {updated}',
-      aboutScope: 'Verification: DeepSeek/Kimi balances and Kimi For Coding quota were verified live; StepFun, Novita, GLM and MiniMax adapters were validated with interface fixtures, not a real account.',
+      aboutScope: 'Verification: DeepSeek/Kimi balances and Kimi For Coding quota were verified live; StepFun, Novita, GLM, MiniMax, OpenCode Go and Xiaomi MiMo adapters were validated with interface fixtures, not a real account.',
       aboutGitHub: 'GitHub',
+      cardBalance: 'Balance: {value}',
+      cardQuota: 'Quota: {value}',
+      cardUnavailable: 'No balance data',
+      modelsFooterTitle: 'Balances & quotas',
+      modelsFooterEmpty: 'No readable sources',
+      modelsFooterRefresh: 'Refresh',
+      generalSidebarLabel: 'Show balances and quotas in the sidebar',
+      generalSidebarHint: 'Turned off, the sidebar hides them; this page and Models still show them.',
+      alertsEnabled: 'Low balance / quota alerts',
+      alertsEnabledHint: 'Show a bottom-right notice when a source falls below its threshold.',
+      alertMoneyThreshold: 'Low-balance threshold',
+      alertQuotaThreshold: 'Low-quota threshold',
+      alertMoneyOption: '¥{n}',
+      alertPercentOption: '{n}%',
+      alertLowBalance: '{name} is low: {value}',
+      alertLowQuota: '{name} is low: {percent}% left',
+      alertDismiss: 'Dismiss',
+      accountTopUp: 'Top up',
+      accountUsage: 'Usage',
       labelGlm: 'GLM Coding',
+      labelOpencode: 'OpenCode Go',
+      labelXiaomi: 'Xiaomi MiMo',
+      variantSuffix: ' ({variant})',
       labelMinimax: 'MiniMax',
       labelKimiCoding: 'Kimi Coding',
       labelStepfun: 'StepFun',
@@ -252,6 +298,7 @@ window.__ModuleLoader__.load({
       daysHours: '{n}d{h}h',
       statusNoPlan: 'No subscription plan',
       statusSigninExpired: 'Subscription sign-in expired; sign in again',
+      statusUnsafeEndpoint: 'Endpoint is not an allowed official HTTPS address; request skipped',
       statusApiRetired: 'Official balance API retired (HTTP {status})',
       statusFailedHttp: 'Read failed (HTTP {status})',
       sectionUnavailable: 'Other detected connections',
@@ -260,6 +307,7 @@ window.__ModuleLoader__.load({
       detailWindow5h: '5h pool {value} left',
       detailWindowWeek: 'Weekly pool {value} left',
       detailWindowTools: 'Tools quota {value} left',
+      detailWindowMonth: 'Monthly quota {value} left',
       resettingNow: 'resetting now',
       errorInvalidUrl: 'invalid endpoint URL',
       errorJsonPath: 'the JSON field path did not resolve to a number',
@@ -310,17 +358,17 @@ window.__ModuleLoader__.load({
     const DICTS = { zh, en };
     /** Preference defaults. */
     /** Public plugin version shown in the About section; must equal package.json version. */
-    const PLUGIN_VERSION = '1.0.0';
+    const PLUGIN_VERSION = '1.1.0';
     /** Public developer/maintainer shown in the About section. */
     const PLUGIN_AUTHOR = 'dan-cube';
     /** Release date shown in the About section (publisher may confirm it before publishing). */
-    const PLUGIN_UPDATED = '2026-11-04';
+    const PLUGIN_UPDATED = '2026-11-17';
     /** Public GitHub account linked in the About section. */
     const PLUGIN_ACCOUNT = 'https://github.com/dan-cube';
     /** Public repository linked in the About section. */
     const PLUGIN_REPO = 'https://github.com/dan-cube/dsh-balance-center';
 
-    const DEFAULT_PREFS = { language: 'auto', refreshSeconds: 60, hidden: [], order: [], customSources: [], sourceLang: {}, splitDeepseek: false };
+    const DEFAULT_PREFS = { language: 'auto', refreshSeconds: 60, hidden: [], order: [], customSources: [], sourceLang: {}, splitDeepseek: false, sidebarEnabled: true, alertsEnabled: false, alertMoneyThreshold: 20, alertQuotaThreshold: 10 };
 
     /** Legacy per-connection keys collapsed into the merged DeepSeek source. */
     const LEGACY_SOURCE_KEYS = { account: 'deepseek', 'provider:deepseek-official': 'deepseek', 'provider:deepseek': 'deepseek' };
@@ -333,6 +381,21 @@ window.__ModuleLoader__.load({
     /** @returns text when the value is a non-empty string. */
     function text(value) {
       return typeof value === 'string' && value !== '' ? value : undefined;
+    }
+
+    /** @returns the account usage/top-up links, or undefined when the account Remote lacks them. */
+    async function readAccountLinks(ctx) {
+      const account = ctx.remote === undefined ? undefined : ctx.remote.account;
+      if (account === undefined || typeof account.getState !== 'function') return undefined;
+      try {
+        const raw = await account.getState();
+        const state = raw !== null && typeof raw === 'object' && raw.ok === true ? raw.value : raw;
+        const links = state !== null && typeof state === 'object' ? state.links : undefined;
+        if (links === null || typeof links !== 'object') return undefined;
+        return { topUpUrl: links.topUpUrl, usageUrl: links.usageUrl };
+      } catch {
+        return undefined;
+      }
     }
 
     /** @returns the Host release version carried by the bootstrap payload, or a neutral fallback. */
@@ -431,6 +494,13 @@ window.__ModuleLoader__.load({
       return tr(lang, 'statusFailed');
     }
 
+    /** @returns the localized regional suffix of one source, or ''. */
+    function variantSuffixOf(source, lang) {
+      if (source.variant === 'intl') return tr(lang, 'labelIntl');
+      if (source.variant === 'ams' || source.variant === 'sgp') return tr(lang, 'variantSuffix', { variant: String(source.variant).toUpperCase() });
+      return '';
+    }
+
     /** @returns the localized display label of one source. */
     function sourceLabel(source, lang) {
       if (source.merged === true && source.family === 'deepseek') {
@@ -439,7 +509,7 @@ window.__ModuleLoader__.load({
       }
       if (source.kind === 'account') return tr(lang, 'accountLabel') + (source.variant === 'intl' ? tr(lang, 'labelIntl') : '');
       if (source.kind === 'provider') {
-        const suffix = source.variant === 'intl' ? tr(lang, 'labelIntl') : '';
+        const suffix = variantSuffixOf(source, lang);
         switch (source.family) {
           case 'deepseek': return tr(lang, 'deepseekApiLabel') + suffix;
           case 'kimi': return tr(lang, 'labelKimi') + suffix;
@@ -449,6 +519,8 @@ window.__ModuleLoader__.load({
           case 'minimax': return tr(lang, 'labelMinimax') + suffix + tr(lang, 'quotaSuffix');
           case 'kimi-coding': return tr(lang, 'labelKimiCoding') + tr(lang, 'quotaSuffix');
           case 'stepfun': return tr(lang, 'labelStepfun') + tr(lang, 'providerSuffix');
+          case 'opencode': return tr(lang, 'labelOpencode') + tr(lang, 'quotaSuffix');
+          case 'xiaomi': return tr(lang, 'labelXiaomi') + suffix + tr(lang, 'quotaSuffix');
           case 'novita': return tr(lang, 'labelNovita') + tr(lang, 'providerSuffix');
           default: return `${source.name}${tr(lang, 'providerSuffix')}`;
         }
@@ -541,7 +613,7 @@ window.__ModuleLoader__.load({
       const percent = window.remainingPercent === undefined ? undefined : `${formatPercent(window.remainingPercent)}%`;
       const value = percent
         ?? `${groupDigits(String(Math.round(window.remaining ?? 0)))}/${groupDigits(String(Math.round(window.total ?? 0)))}`;
-      const key = window.key === 'week' ? 'detailWindowWeek' : window.key === 'tools' ? 'detailWindowTools' : 'detailWindow5h';
+      const key = window.key === 'week' ? 'detailWindowWeek' : window.key === 'tools' ? 'detailWindowTools' : window.key === 'month' ? 'detailWindowMonth' : 'detailWindow5h';
       return tr(lang, key, { value });
     }
 
@@ -556,6 +628,7 @@ window.__ModuleLoader__.load({
         case 'failed': return tr(lang, 'statusFailed');
         case 'no_plan': return tr(lang, 'statusNoPlan');
         case 'signin_expired': return tr(lang, 'statusSigninExpired');
+        case 'unsafe_endpoint': return tr(lang, 'statusUnsafeEndpoint');
         default: return '';
       }
     }
@@ -656,6 +729,10 @@ window.__ModuleLoader__.load({
           ? migrateLangKeys(Object.fromEntries(Object.entries(source.sourceLang).filter(([, value]) => value === 'zh' || value === 'en')))
           : {},
         splitDeepseek: source.splitDeepseek === true,
+        sidebarEnabled: source.sidebarEnabled !== false,
+        alertsEnabled: source.alertsEnabled === true,
+        alertMoneyThreshold: [5, 10, 20, 50, 100].includes(Number(source.alertMoneyThreshold)) ? Number(source.alertMoneyThreshold) : DEFAULT_PREFS.alertMoneyThreshold,
+        alertQuotaThreshold: [5, 10, 20, 30].includes(Number(source.alertQuotaThreshold)) ? Number(source.alertQuotaThreshold) : DEFAULT_PREFS.alertQuotaThreshold,
       };
     }
 
@@ -833,7 +910,8 @@ window.__ModuleLoader__.load({
           && source.status !== 'no_credential'
           && source.status !== 'loading'
           && source.status !== 'no_plan'
-          && source.status !== 'signin_expired';
+          && source.status !== 'signin_expired'
+          && source.status !== 'unsafe_endpoint';
       }
       if (source.kind === 'account') return source.status === 'ready';
       return true;
@@ -895,8 +973,8 @@ window.__ModuleLoader__.load({
       return prefs.splitDeepseek === true ? sources : mergeDeepseek(sources);
     }
 
-    /** @returns visible, ready sources in the user's order. */
-    function visibleSources(data, prefs) {
+    /** @returns ready, non-hidden sources in the user's order (no sidebar gate). */
+    function readySources(data, prefs) {
       const hidden = new Set(prefs.hidden ?? []);
       const order = prefs.order ?? [];
       const rank = (key) => {
@@ -907,6 +985,11 @@ window.__ModuleLoader__.load({
         .filter((source) => !hidden.has(source.key))
         .filter((source) => source.status === 'ready')
         .sort((left, right) => rank(left.key) - rank(right.key));
+    }
+
+    /** @returns visible, ready sources in the user's order. */
+    function visibleSources(data, prefs) {
+      return prefs.sidebarEnabled === false ? [] : readySources(data, prefs);
     }
 
 
@@ -970,6 +1053,21 @@ window.__ModuleLoader__.load({
 .dshab_aboutLine,.dshab_aboutText{font-size:12px;line-height:18px;color:var(--dsw-alias-label-secondary)}
 .dshab_aboutLabel{color:var(--dsw-alias-label-tertiary)}
 .dshab_footerNote{color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px}
+.dshab_providerExtra{display:flex;flex-direction:column;gap:2px;padding:2px 0 6px}
+.dshab_modelsFooter{display:flex;flex-direction:column;gap:8px;border:.5px solid var(--dsw-alias-border-l2);border-radius:var(--dsw-radius-xl);background:var(--dsw-alias-bg-layer-1);padding:12px 16px;margin-top:12px}
+.dshab_modelsFooterHead{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.dshab_modelsFooterTitle{font-size:13px;font-weight:600;line-height:20px;color:var(--dsw-alias-label-primary)}
+.dshab_modelsFooterList{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;line-height:18px;color:var(--dsw-alias-label-secondary)}
+.dshab_modelsFooterItem{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.dshab_generalRow{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:46px;padding:8px 0;border-top:.5px solid var(--dsw-alias-border-l1)}
+.dshab_generalMain{display:flex;flex-direction:column;gap:2px;min-width:0}
+.dshab_generalLabel{font-size:13px;line-height:20px;color:var(--dsw-alias-label-primary)}
+.dshab_headLinks{display:flex;flex-wrap:wrap;gap:8px;padding-top:2px}
+.dshab_linkButton{display:inline-flex;align-items:center;height:24px;padding:0 10px;border-radius:999px;border:.5px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-primary);font-size:12px;line-height:18px;text-decoration:none;background:var(--dsw-alias-bg-layer-1)}
+.dshab_linkButton:hover{background:var(--dsw-alias-bg-layer-2)}
+.dshab_alerts{position:fixed;right:16px;bottom:16px;z-index:80;display:flex;flex-direction:column;gap:8px;pointer-events:auto;max-width:min(360px,calc(100vw - 32px))}
+.dshab_alert{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:12px;border:.5px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-1);color:var(--dsw-alias-label-primary);box-shadow:0 8px 24px rgba(0,0,0,.12);font-size:12px;line-height:18px}
+.dshab_alertText{flex:1;min-width:0}
 `;
 
     /** Install the stylesheet once per page. */
@@ -1275,8 +1373,14 @@ window.__ModuleLoader__.load({
 
         /** Preference store (localStorage-backed). */
         const prefsStore = createStore(loadPrefs());
+        /** Persist a preference patch for the whole plugin (general row, settings page). */
+        const persistPrefs = (patch) => {
+          const next = { ...prefsStore.get(), ...patch };
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {}
+          prefsStore.set(next);
+        };
         /** Data store fed by the account Remote and the Host provider channel. */
-        const dataStoreStore = createStore({ account: { status: 'loading' }, providers: undefined, custom: [], loading: false, error: undefined, at: 0 });
+        const dataStoreStore = createStore({ account: { status: 'loading' }, accountLinks: undefined, providers: undefined, custom: [], loading: false, error: undefined, at: 0 });
 
         /** Re-read the account balance and the Host provider snapshot. */
         async function refresh() {
@@ -1286,11 +1390,14 @@ window.__ModuleLoader__.load({
           const metadata = accountMetadata(ctx);
           const accountTask = readAccountSource(ctx, metadata).catch(() => ({ status: 'failed' }));
           const hostTask = callHost('snapshot', { customSources: prefs.customSources });
+          const linksTask = readAccountLinks(ctx).catch(() => undefined);
           const account = await accountTask;
           const host = await hostTask;
+          const accountLinks = await linksTask;
           const hostOk = host.ok === true;
           dataStoreStore.set({
             account,
+            accountLinks,
             providers: hostOk === true ? host.value.providers ?? [] : undefined,
             custom: hostOk === true ? host.value.custom ?? [] : [],
             loading: false,
@@ -1343,6 +1450,172 @@ window.__ModuleLoader__.load({
             for (const stop of stops) if (typeof stop === 'function') stop();
           };
         }, 'balance-center: provider change listeners');
+        ctx.effect(() => {
+          const account = ctx.remote === undefined ? undefined : ctx.remote.account;
+          if (account === undefined || typeof account.watchState !== 'function') return () => {};
+          const controller = new AbortController();
+          let stopped = false;
+          (async () => {
+            try {
+              let iterable = account.watchState(controller.signal);
+              if (iterable !== null && typeof iterable === 'object' && typeof iterable.then === 'function') iterable = await iterable;
+              if (iterable === null || typeof iterable !== 'object' || typeof iterable[Symbol.asyncIterator] !== 'function') return;
+              for await (const _update of iterable) {
+                if (stopped) return;
+                refresh();
+              }
+            } catch {
+              /* account stream unavailable in this DSH build; the scheduler still refreshes */
+            }
+          })();
+          return () => {
+            stopped = true;
+            controller.abort();
+          };
+        }, 'balance-center: account state stream');
+
+        /** Low balance/quota alerts shown in the frame-wide overlay. */
+        const alertStore = createStore([]);
+        const dismissedAlerts = new Set();
+        const evaluateAlerts = () => {
+          const prefs = prefsStore.get();
+          const data = dataStoreStore.get();
+          const alerts = [];
+          if (prefs.alertsEnabled === true) {
+            const ready = readySources(data, prefs);
+            const lowKeys = new Set();
+            for (const source of ready) {
+              const sourceLang = resolveLang(prefs, ctx);
+              if (source.quota !== undefined) {
+                const window = quotaWindowOf(source);
+                if (window === undefined || window.remainingPercent === undefined) continue;
+                if (window.remainingPercent > prefs.alertQuotaThreshold) continue;
+                const key = `${source.key}:quota`;
+                lowKeys.add(key);
+                if (dismissedAlerts.has(key)) continue;
+                alerts.push({
+                  key,
+                  text: tr(sourceLang, 'alertLowQuota', {
+                    name: sourceLabel(source, sourceLang),
+                    percent: formatPercent(window.remainingPercent),
+                  }),
+                });
+              } else if ((source.currency === 'CNY' || source.currency === 'USD') && source.units !== undefined) {
+                if (source.units >= prefs.alertMoneyThreshold * 100) continue;
+                const key = `${source.key}:money`;
+                lowKeys.add(key);
+                if (dismissedAlerts.has(key)) continue;
+                alerts.push({
+                  key,
+                  text: tr(sourceLang, 'alertLowBalance', {
+                    name: sourceLabel(source, sourceLang),
+                    value: moneyText(source, sourceLang),
+                  }),
+                });
+              }
+            }
+            for (const key of Array.from(dismissedAlerts)) if (!lowKeys.has(key)) dismissedAlerts.delete(key);
+          }
+          alertStore.set(alerts.slice(0, 3));
+        };
+        const dismissAlert = (key) => {
+          dismissedAlerts.add(key);
+          evaluateAlerts();
+        };
+        ctx.effect(() => {
+          const offData = dataStoreStore.subscribe(evaluateAlerts);
+          const offPrefs = prefsStore.subscribe(evaluateAlerts);
+          evaluateAlerts();
+          return () => {
+            offData();
+            offPrefs();
+          };
+        }, 'balance-center: low balance alerts');
+
+        /** One provider card's balance/quota line inside Settings → Models. */
+        function ProviderCardExtras({ provider }) {
+          useLocale(ctx);
+          const prefs = useStore(prefsStore);
+          const data = useStore(dataStoreStore);
+          const routeId = provider !== null && typeof provider === 'object' ? provider.provider : undefined;
+          if (typeof routeId !== 'string' || routeId === '') return null;
+          const source = allSources(data, prefs).find((item) => (item.kind === 'provider' && item.id === routeId) || (routeId === 'deepseek-account' && item.kind === 'account'));
+          if (source === undefined) return null;
+          const sourceLang = labelLangOf(source, prefs, ctx);
+          if (source.status !== 'ready') {
+            return h('div', { className: 'dshab_providerExtra' }, h('span', { className: 'dshab_settingHint' }, unreadableReason(source, sourceLang)));
+          }
+          const quota = source.quota === undefined ? undefined : quotaValueText(source, sourceLang);
+          return h('div', { className: 'dshab_providerExtra' },
+            h('span', { className: 'dshab_settingHint' }, quota === undefined
+              ? tr(sourceLang, 'cardBalance', { value: moneyText(source, sourceLang) })
+              : tr(sourceLang, 'cardQuota', { value: quota.main })));
+        }
+
+        /** Footer summary inside Settings → Models. */
+        function ModelsFooter() {
+          useLocale(ctx);
+          const prefs = useStore(prefsStore);
+          const data = useStore(dataStoreStore);
+          const lang = resolveLang(prefs, ctx);
+          const [busy, setBusy] = React.useState(false);
+          const sources = readySources(data, prefs);
+          const refreshNow = async () => {
+            setBusy(true);
+            await refresh();
+            setBusy(false);
+          };
+          return h('div', { className: 'dshab_modelsFooter' },
+            h('div', { className: 'dshab_modelsFooterHead' },
+              h('span', { className: 'dshab_modelsFooterTitle' }, tr(lang, 'modelsFooterTitle')),
+              h(Button, { onClick: refreshNow, disabled: busy }, busy === true ? tr(lang, 'refreshing') : tr(lang, 'modelsFooterRefresh'))),
+            sources.length === 0
+              ? h('span', { className: 'dshab_settingHint' }, tr(lang, 'modelsFooterEmpty'))
+              : h('div', { className: 'dshab_modelsFooterList' }, sources.map((source) => {
+                const sourceLang = labelLangOf(source, prefs, ctx);
+                const quota = source.quota === undefined ? undefined : quotaValueText(source, sourceLang);
+                return h('span', { className: 'dshab_modelsFooterItem', key: source.key },
+                  `${sourceLabel(source, sourceLang)}${tr(sourceLang, 'colon')}${quota === undefined ? moneyText(source, sourceLang) : quota.main}`);
+              })));
+        }
+
+        /** One General-settings row: sidebar master switch. */
+        function GeneralSidebarRow() {
+          useLocale(ctx);
+          const prefs = useStore(prefsStore);
+          const lang = resolveLang(prefs, ctx);
+          return h('div', { className: 'dshab_generalRow' },
+            h('div', { className: 'dshab_generalMain' },
+              h('span', { className: 'dshab_generalLabel' }, tr(lang, 'generalSidebarLabel')),
+              h('span', { className: 'dshab_settingHint' }, tr(lang, 'generalSidebarHint'))),
+            h(Switch, {
+              checked: prefs.sidebarEnabled !== false,
+              onChange: (value) => persistPrefs({ sidebarEnabled: value }),
+              label: tr(lang, 'generalSidebarLabel'),
+            }));
+        }
+
+        /** Settings navigation icon for the balance section. */
+        function SectionIcon({ size }) {
+          const edge = typeof size === 'number' && size > 0 ? size : 16;
+          return h('svg', { width: edge, height: edge, viewBox: '0 0 24 24', 'aria-hidden': true, style: { display: 'block' } },
+            h('path', {
+              d: 'M4 7.5h13a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3v-9zm0 0 2.5-2.5H16a2 2 0 0 1 2 2M16 13h2.5',
+              fill: 'none', stroke: 'currentColor', strokeWidth: 1.8, strokeLinecap: 'round', strokeLinejoin: 'round',
+            }));
+        }
+
+        /** Frame-wide low balance/quota notices. */
+        function AlertOverlay() {
+          useLocale(ctx);
+          const prefs = useStore(prefsStore);
+          const alerts = useStore(alertStore);
+          const lang = resolveLang(prefs, ctx);
+          if (alerts.length === 0) return null;
+          return h('div', { className: 'dshab_alerts' }, alerts.map((alert) => h('div', { className: 'dshab_alert', key: alert.key },
+            h('span', { className: 'dshab_alertText' }, alert.text),
+            h(Button, { onClick: () => dismissAlert(alert.key), title: tr(lang, 'alertDismiss') }, tr(lang, 'alertDismiss')))));
+        }
 
         /** Sidebar lines above the account row. */
         function BalanceRows({ wide }) {
@@ -1497,7 +1770,10 @@ window.__ModuleLoader__.load({
           return h('div', { className: 'dshab_page' },
             h('div', { className: 'dshab_pageHead' },
               h('h2', { className: 'dshab_pageTitle' }, tr(lang, 'title')),
-              h('p', { className: 'dshab_pageSubtitle' }, tr(lang, 'subtitle'))),
+              h('p', { className: 'dshab_pageSubtitle' }, tr(lang, 'subtitle')),
+              data.accountLinks === undefined ? null : h('div', { className: 'dshab_headLinks' },
+                data.accountLinks.topUpUrl === undefined ? null : h('a', { className: 'dshab_linkButton', href: data.accountLinks.topUpUrl, target: '_blank', rel: 'noreferrer' }, tr(lang, 'accountTopUp')),
+                data.accountLinks.usageUrl === undefined ? null : h('a', { className: 'dshab_linkButton', href: data.accountLinks.usageUrl, target: '_blank', rel: 'noreferrer' }, tr(lang, 'accountUsage')))),
             h('section', { className: 'dshab_section' },
               h('h3', { className: 'dshab_sectionTitle' }, tr(lang, 'sectionSources')),
               h('div', { className: 'dshab_card' },
@@ -1591,6 +1867,42 @@ window.__ModuleLoader__.load({
                     onChange: (value) => persist({ splitDeepseek: value }),
                     label: tr(lang, 'splitDeepseek'),
                   }),
+                }),
+                h(SettingRow, {
+                  label: tr(lang, 'generalSidebarLabel'),
+                  hint: tr(lang, 'generalSidebarHint'),
+                  control: h(Switch, {
+                    checked: prefs.sidebarEnabled !== false,
+                    onChange: (value) => persist({ sidebarEnabled: value }),
+                    label: tr(lang, 'generalSidebarLabel'),
+                  }),
+                }),
+                h(SettingRow, {
+                  label: tr(lang, 'alertsEnabled'),
+                  hint: tr(lang, 'alertsEnabledHint'),
+                  control: h(Switch, {
+                    checked: prefs.alertsEnabled === true,
+                    onChange: (value) => persist({ alertsEnabled: value }),
+                    label: tr(lang, 'alertsEnabled'),
+                  }),
+                }),
+                prefs.alertsEnabled !== true ? null : h(SettingRow, {
+                  label: tr(lang, 'alertMoneyThreshold'),
+                  control: h(Select, {
+                    value: String(prefs.alertMoneyThreshold),
+                    label: tr(lang, 'alertMoneyThreshold'),
+                    onChange: (value) => persist({ alertMoneyThreshold: Number(value) }),
+                    options: [5, 10, 20, 50, 100].map((n) => ({ value: String(n), label: tr(lang, 'alertMoneyOption', { n }) })),
+                  }),
+                }),
+                prefs.alertsEnabled !== true ? null : h(SettingRow, {
+                  label: tr(lang, 'alertQuotaThreshold'),
+                  control: h(Select, {
+                    value: String(prefs.alertQuotaThreshold),
+                    label: tr(lang, 'alertQuotaThreshold'),
+                    onChange: (value) => persist({ alertQuotaThreshold: Number(value) }),
+                    options: [5, 10, 20, 30].map((n) => ({ value: String(n), label: tr(lang, 'alertPercentOption', { n }) })),
+                  }),
                 }))),
             h('section', { className: 'dshab_section' },
               h('h3', { className: 'dshab_sectionTitle' }, tr(lang, 'sectionHelp')),
@@ -1658,6 +1970,41 @@ window.__ModuleLoader__.load({
             if (typeof sectionDispose === 'function') sectionDispose();
           };
         }, 'balance-center: settings section lifetime');
+
+        /** Register one additive slot contribution; older DSH builds may not have the slot. */
+        const contribute = (slot, callback) => {
+          try {
+            return ctx.slots.inject(slot, callback);
+          } catch {
+            return () => {};
+          }
+        };
+        contribute('settings.models.provider-card', () => {
+          const keys = ['llm-pi-ai', 'llm-deepseek', 'llm-deepseek-account'];
+          const disposers = keys.map((key) => ctx.slots.register({ name: 'settings.models.provider-card', key }, ProviderCardExtras));
+          return () => {
+            for (const dispose of disposers) if (typeof dispose === 'function') dispose();
+          };
+        });
+        contribute('settings.models.footer', () => ctx.slots.register({
+          name: 'settings.models.footer',
+          id: 'balance-center.models-footer',
+          order: 80,
+        }, ModelsFooter));
+        contribute('settings.general.item', () => ctx.slots.register({
+          name: 'settings.general.item',
+          id: 'balance-center.sidebar-toggle',
+          order: 25,
+        }, GeneralSidebarRow));
+        contribute('settings.section.icon', () => ctx.slots.register({
+          name: 'settings.section.icon',
+          id: 'balance-center',
+        }, SectionIcon));
+        contribute('shell.overlay', () => ctx.slots.register({
+          name: 'shell.overlay',
+          id: 'balance-center.alerts',
+          order: 80,
+        }, AlertOverlay));
       },
     };
   },
