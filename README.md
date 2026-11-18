@@ -8,6 +8,13 @@
     <a href="#支持清单与接入方式">支持清单</a>
   </p>
   <p>中文 · <a href="README.en.md">English</a></p>
+  <p>
+    <a href="https://github.com/dan-cube/dsh-balance-center/releases"><img src="https://img.shields.io/github/v/release/dan-cube/dsh-balance-center?label=release" alt="release" /></a>
+    <a href="https://github.com/dan-cube/dsh-balance-center/blob/main/LICENSE"><img src="https://img.shields.io/github/license/dan-cube/dsh-balance-center" alt="license" /></a>
+    <img src="https://img.shields.io/badge/dsh-%E2%89%A5%200.2.1-4B6EF5" alt="dsh" />
+    <a href="https://github.com/dan-cube/dsh-balance-center/stargazers"><img src="https://img.shields.io/github/stars/dan-cube/dsh-balance-center?style=social" alt="stars" /></a>
+  </p>
+  <p><code>dsh plugin --profile desktop add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'</code></p>
 </div>
 
 在 DSH 侧边栏同时查看多个模型平台的余额与订阅额度，在设置页统一管理显示、排序、语言与刷新。
@@ -15,6 +22,16 @@
 支持 DeepSeek、Kimi、OpenRouter、StepFun、Novita，以及部分 one-api / new-api 中转站；也支持订阅额度（GLM Coding Plan、MiniMax Token Plan、Kimi For Coding）。还可以添加自己的 JSON 余额接口。自动识别已配置的模型连接，只展示能读取余额或额度的来源。
 
 这是面向 DeepSeek Harness（DSH）的第三方社区插件。余额按平台或账号查询，同一账号下多个模型可能共用余额，不是每个模型各有一个钱包。
+
+## 一眼看懂
+
+| 维度 | 覆盖 |
+|---|---|
+| 余额来源 | DeepSeek（会员或 API Key）、Kimi、OpenRouter、StepFun、Novita、Xiaomi MiMo、one-api / new-api 中转站、自定义 JSON 接口 |
+| 订阅额度 | GLM Coding Plan、MiniMax Token Plan、Kimi For Coding、OpenCode Go、Xiaomi MiMo Token Plan |
+| 显示位置 | 侧边栏常驻行、独立设置页、模型设置页卡片与底部、通用设置开关 |
+| 提醒与入口 | 低余额 / 低额度浮层提醒（阈值可调）、账号充值 / 用量快捷链接 |
+| 语言 | 中文 / English，可逐行切换 |
 
 ## 界面预览
 

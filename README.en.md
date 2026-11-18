@@ -12,6 +12,13 @@
     <a href="#settings-page">Settings</a> ·
     <a href="#privacy-and-security">Privacy</a>
   </p>
+  <p>
+    <a href="https://github.com/dan-cube/dsh-balance-center/releases"><img src="https://img.shields.io/github/v/release/dan-cube/dsh-balance-center?label=release" alt="release" /></a>
+    <a href="https://github.com/dan-cube/dsh-balance-center/blob/main/LICENSE"><img src="https://img.shields.io/github/license/dan-cube/dsh-balance-center" alt="license" /></a>
+    <img src="https://img.shields.io/badge/dsh-%E2%89%A5%200.2.1-4B6EF5" alt="dsh" />
+    <a href="https://github.com/dan-cube/dsh-balance-center/stargazers"><img src="https://img.shields.io/github/stars/dan-cube/dsh-balance-center?style=social" alt="stars" /></a>
+  </p>
+  <p><code>dsh plugin --profile desktop add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'</code></p>
 </div>
 
 Shows the balances of the model API access you configured in the Harness — and,
@@ -20,6 +27,16 @@ the sidebar account row. Rows are named `<platform> 余额` / `<platform> 额度
 `<platform>` in English) — there is no “member balance” wording. Everything is
 managed on its own native settings page, and only sources the Harness can
 actually read are listed.
+
+## At a glance
+
+| | |
+|---|---|
+| Balances | DeepSeek (member account or API key), Kimi, OpenRouter, StepFun, Novita, Xiaomi MiMo, one-api / new-api relays, custom JSON endpoints |
+| Subscription quotas | GLM Coding Plan, MiniMax Token Plan, Kimi For Coding, OpenCode Go, Xiaomi MiMo Token Plan |
+| Where it shows | Sidebar rows, its own settings page, Models settings cards and footer, General settings toggle |
+| Alerts and links | Low-balance / low-quota overlay alerts with thresholds, top-up and usage links |
+| Language | Chinese / English, switchable per row |
 
 ## Screenshots
 
