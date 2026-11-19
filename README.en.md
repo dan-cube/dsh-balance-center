@@ -13,13 +13,18 @@
     <a href="#privacy-and-security">Privacy</a>
   </p>
   <p>
+    <a href="https://dsh-plugin.org/plugins/dan-cube/dsh-balance-center"><img src="https://dsh-plugin.org/badges/listed.svg" alt="Listed on dsh-plugin.org" /></a>
     <a href="https://github.com/dan-cube/dsh-balance-center/releases"><img src="https://img.shields.io/github/v/release/dan-cube/dsh-balance-center?label=release" alt="release" /></a>
     <a href="https://github.com/dan-cube/dsh-balance-center/blob/main/LICENSE"><img src="https://img.shields.io/github/license/dan-cube/dsh-balance-center" alt="license" /></a>
-    <img src="https://img.shields.io/badge/dsh-%E2%89%A5%200.2.1-4B6EF5" alt="dsh" />
+    <img src="https://img.shields.io/badge/dsh-tested%200.2.2--rc.3-4B6EF5" alt="Tested on DSH 0.2.2-rc.3" />
     <a href="https://github.com/dan-cube/dsh-balance-center/stargazers"><img src="https://img.shields.io/github/stars/dan-cube/dsh-balance-center?style=social" alt="stars" /></a>
   </p>
   <p><code>dsh plugin --profile desktop add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'</code></p>
 </div>
+
+**Latest release · v1.1.0 · 2026-11-17** — adds Xiaomi MiMo and OpenCode Go, DSH 0.2.2 integration, low-balance alerts, and Xiaomi authenticated-endpoint validation. [Release notes](https://github.com/dan-cube/dsh-balance-center/releases/tag/v1.1.0) · [Version history](CHANGELOG.md)
+
+View balances and subscription quotas across model providers inside DSH, with low-balance alerts and reset times close at hand.
 
 Shows the balances of the model API access you configured in the Harness — and,
 for subscription plans, their remaining quota — as compact rows directly above
@@ -43,24 +48,18 @@ actually read are listed.
 Screenshots from the running DSH app. The sidebar balance values are masked.
 
 
-| Sidebar rows | About: privacy and version |
+| Sidebar rows | Settings and alert thresholds |
 |---|---|
-| ![Sidebar balance rows](docs/screenshots/sidebar.png) | ![Balance Center settings](docs/screenshots/settings.png) |
+| ![Sidebar balance rows](docs/screenshots/sidebar.png) | ![Balance Center settings](docs/screenshots/settings-controls.png) |
 
-## What it looks like
+### Settings walkthrough
 
-```
-┌──────────────────────────────────┐
-│  … session list …                │
-│                                  │
-│  DeepSeek 余额：¥100.00          │
-│  Kimi 余额：¥50.00               │
-│  OpenRouter 余额：$10.00         │
-│  SiliconFlow 余额：¥25.00       │
-│                                  │
-│  (avatar)  DeepSeek Account  ⋯   │
-└──────────────────────────────────┘
-```
+![Language, alert settings, sidebar toggle and refresh in DSH](assets/settings-demo.gif)
+
+Recorded in a real, isolated DSH 0.2.2-rc.3 Web profile with no model credentials configured. It demonstrates settings operations. The sidebar image above is from the account-connected app with private values masked.
+
+[Full WebM recording](assets/settings-demo.webm) · [About, privacy and version](docs/screenshots/settings.png)
+
 
 Each source is one row in the form `Name：currencySymbol+amount`, left aligned,
 with the amount emphasised. Currency comes from the provider response (`¥`, `$`,

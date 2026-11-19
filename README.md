@@ -9,15 +9,18 @@
   </p>
   <p>中文 · <a href="README.en.md">English</a></p>
   <p>
+    <a href="https://dsh-plugin.org/plugins/dan-cube/dsh-balance-center"><img src="https://dsh-plugin.org/badges/listed.svg" alt="Listed on dsh-plugin.org" /></a>
     <a href="https://github.com/dan-cube/dsh-balance-center/releases"><img src="https://img.shields.io/github/v/release/dan-cube/dsh-balance-center?label=release" alt="release" /></a>
     <a href="https://github.com/dan-cube/dsh-balance-center/blob/main/LICENSE"><img src="https://img.shields.io/github/license/dan-cube/dsh-balance-center" alt="license" /></a>
-    <img src="https://img.shields.io/badge/dsh-%E2%89%A5%200.2.1-4B6EF5" alt="dsh" />
+    <img src="https://img.shields.io/badge/dsh-tested%200.2.2--rc.3-4B6EF5" alt="Tested on DSH 0.2.2-rc.3" />
     <a href="https://github.com/dan-cube/dsh-balance-center/stargazers"><img src="https://img.shields.io/github/stars/dan-cube/dsh-balance-center?style=social" alt="stars" /></a>
   </p>
   <p><code>dsh plugin --profile desktop add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'</code></p>
 </div>
 
-在 DSH 侧边栏同时查看多个模型平台的余额与订阅额度，在设置页统一管理显示、排序、语言与刷新。
+**最近更新 · v1.1.0 · 2026-11-17** — 新增小米 MiMo 与 OpenCode Go，适配 DSH 0.2.2，加入低余额提醒并加固小米接口鉴权地址校验。[本次更新](https://github.com/dan-cube/dsh-balance-center/releases/tag/v1.1.0) · [历史版本](CHANGELOG.md)
+
+在 DSH 里集中查看多个模型平台的余额与订阅额度，快用完时提醒你，省去逐个平台打开控制台查看。在设置页统一管理显示、排序、语言与刷新。
 
 支持 DeepSeek、Kimi、OpenRouter、StepFun、Novita，以及部分 one-api / new-api 中转站；也支持订阅额度（GLM Coding Plan、MiniMax Token Plan、Kimi For Coding）。还可以添加自己的 JSON 余额接口。自动识别已配置的模型连接，只展示能读取余额或额度的来源。
 
@@ -47,9 +50,15 @@
 
 打开「设置 → 余额与额度」，逐项选择要显示的来源，调整顺序和标签语言，也可设置刷新间隔、手动刷新或添加自定义余额源。
 
-![余额与额度说明页的隐私与版本区](docs/screenshots/settings.png)
+![余额与额度设置及提醒阈值](docs/screenshots/settings-controls.png)
 
-> 新版说明页的隐私与版本区。
+### 设置操作演示
+
+![语言切换、提醒设置、侧边栏开关与刷新](assets/settings-demo.gif)
+
+演示录于隔离的真实 DSH 0.2.2-rc.3 Web，未配置模型凭据，用于展示设置操作。上方侧边栏图来自已接入账号的真实应用，私密数值已遮挡。
+
+[查看完整 WebM 录屏](assets/settings-demo.webm) · [隐私与版本信息实拍](docs/screenshots/settings.png)
 
 ## 主要功能
 
