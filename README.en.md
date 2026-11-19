@@ -14,12 +14,13 @@
   </p>
   <p>
     <a href="https://dsh-plugin.org/plugins/dan-cube/dsh-balance-center"><img src="https://dsh-plugin.org/badges/listed.svg" alt="Listed on dsh-plugin.org" /></a>
+    <a href="https://www.npmjs.com/package/dsh-balance-center"><img src="https://img.shields.io/npm/v/dsh-balance-center" alt="npm version" /></a>
     <a href="https://github.com/dan-cube/dsh-balance-center/releases"><img src="https://img.shields.io/github/v/release/dan-cube/dsh-balance-center?label=release" alt="release" /></a>
     <a href="https://github.com/dan-cube/dsh-balance-center/blob/main/LICENSE"><img src="https://img.shields.io/github/license/dan-cube/dsh-balance-center" alt="license" /></a>
     <img src="https://img.shields.io/badge/dsh-tested%200.2.2--rc.3-4B6EF5" alt="Tested on DSH 0.2.2-rc.3" />
     <a href="https://github.com/dan-cube/dsh-balance-center/stargazers"><img src="https://img.shields.io/github/stars/dan-cube/dsh-balance-center?style=social" alt="stars" /></a>
   </p>
-  <p><code>dsh plugin --profile desktop add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'</code></p>
+  <p><code>dsh plugin --profile desktop add dsh-balance-center</code></p>
 </div>
 
 **Latest release · v1.1.0 · 2026-11-17** — adds Xiaomi MiMo and OpenCode Go, DSH 0.2.2 integration, low-balance alerts, and Xiaomi authenticated-endpoint validation. [Release notes](https://github.com/dan-cube/dsh-balance-center/releases/tag/v1.1.0) · [Version history](CHANGELOG.md)
@@ -238,17 +239,20 @@ Balance & Quota Center is a DSH bundle: a Host half plus a browser half.
 **From the Plugins page (recommended for most users)**
 
 1. Open **Plugins** in the DSH sidebar.
-2. Choose **Add plugin** and paste `git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0`, or download the Release tarball and enter its absolute local path.
+2. Choose **Add plugin**, select the npm source if prompted, and enter `dsh-balance-center`. To install this exact release, enter `dsh-balance-center@1.1.0`.
 3. Enable the bundle and restart DSH. Open **Settings → Balance & Quota**.
 
 **From the CLI**
 
 ```sh
 # DSH desktop app
-dsh plugin --profile desktop add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'
+dsh plugin --profile desktop add dsh-balance-center
 
 # DSH Web
-dsh plugin --profile web add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'
+dsh plugin --profile web add dsh-balance-center
+
+# Install a specific Git tag
+dsh plugin --profile desktop add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'
 
 # From a downloaded Release asset, using its actual path
 dsh plugin --profile desktop add /absolute/path/to/dsh-balance-center-1.1.0.tgz
@@ -259,7 +263,17 @@ If you use a custom profile, replace `desktop` or `web` with its name.
 
 ### Upgrade and uninstall
 
-To upgrade from 1.0.0, remove the older version from the Plugins page and install 1.1.0 using the steps above. Restart DSH and verify the version in **Settings → Balance & Quota → About**. Display preferences in the same profile typically carry over unless you clear browser storage.
+If your plugin manager offers an update for this npm package, confirm it there. Version prompts depend on that manager's catalog and package metadata. For the Web profile, use:
+
+```sh
+dsh plugin --profile web add dsh-balance-center@latest
+```
+
+For the desktop profile, update in the Plugins page, or use `dsh plugin --profile desktop add dsh-balance-center@latest` with the CLI installed by your desktop app. If you originally installed a Git tag or local tarball, replace that source with the npm package through **Add plugin**. Restart DSH when prompted and check **Settings → Balance & Quota → About**. Display preferences in the same profile typically carry over unless browser storage is cleared.
+
+To uninstall, remove **dsh-balance-center** from the Plugins page. Git and offline installation remain available from [GitHub Releases](https://github.com/dan-cube/dsh-balance-center/releases/latest).
+
+Subscribe to **Watch → Custom → Releases** on GitHub to receive release notifications. Please report installation issues with your DSH version, operating system, installation source, and a redacted screenshot. [Report an issue](https://github.com/dan-cube/dsh-balance-center/issues)
 
 ## How it works
 

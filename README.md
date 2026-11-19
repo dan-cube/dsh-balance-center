@@ -10,12 +10,13 @@
   <p>中文 · <a href="README.en.md">English</a></p>
   <p>
     <a href="https://dsh-plugin.org/plugins/dan-cube/dsh-balance-center"><img src="https://dsh-plugin.org/badges/listed.svg" alt="Listed on dsh-plugin.org" /></a>
+    <a href="https://www.npmjs.com/package/dsh-balance-center"><img src="https://img.shields.io/npm/v/dsh-balance-center" alt="npm version" /></a>
     <a href="https://github.com/dan-cube/dsh-balance-center/releases"><img src="https://img.shields.io/github/v/release/dan-cube/dsh-balance-center?label=release" alt="release" /></a>
     <a href="https://github.com/dan-cube/dsh-balance-center/blob/main/LICENSE"><img src="https://img.shields.io/github/license/dan-cube/dsh-balance-center" alt="license" /></a>
     <img src="https://img.shields.io/badge/dsh-tested%200.2.2--rc.3-4B6EF5" alt="Tested on DSH 0.2.2-rc.3" />
     <a href="https://github.com/dan-cube/dsh-balance-center/stargazers"><img src="https://img.shields.io/github/stars/dan-cube/dsh-balance-center?style=social" alt="stars" /></a>
   </p>
-  <p><code>dsh plugin --profile desktop add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'</code></p>
+  <p><code>dsh plugin --profile desktop add dsh-balance-center</code></p>
 </div>
 
 **最近更新 · v1.1.0 · 2026-11-17** — 新增小米 MiMo 与 OpenCode Go，适配 DSH 0.2.2，加入低余额提醒并加固小米接口鉴权地址校验。[本次更新](https://github.com/dan-cube/dsh-balance-center/releases/tag/v1.1.0) · [历史版本](CHANGELOG.md)
@@ -173,17 +174,20 @@
 ### 通过 DSH 插件页面
 
 1. 打开 DSH 侧边栏的「插件」页面，点击「添加插件」。
-2. 输入 `git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0`。也可下载 Release 中的 `.tgz`，再填入该文件的本机绝对路径。按提示安装并启用。
+2. 输入 `dsh-balance-center`，如需选择来源，选择 npm。要固定安装本次版本，可输入 `dsh-balance-center@1.1.0`。按提示安装并启用。
 3. 首次安装后重启一次 DSH，打开「设置 → 余额与额度」。
 
 ### 通过命令行
 
 ```sh
 # DSH 桌面版
-dsh plugin --profile desktop add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'
+dsh plugin --profile desktop add dsh-balance-center
 
 # DSH Web 版
-dsh plugin --profile web add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'
+dsh plugin --profile web add dsh-balance-center
+
+# 指定 tag 安装
+dsh plugin --profile desktop add 'git+https://github.com/dan-cube/dsh-balance-center.git#v1.1.0'
 
 # 从已下载的安装包安装，将路径换为文件的实际位置
 dsh plugin --profile desktop add /absolute/path/to/dsh-balance-center-1.1.0.tgz
@@ -236,7 +240,17 @@ GLM Coding Plan、MiniMax Token Plan、Kimi For Coding 属于订阅套餐额度�
 
 ## 卸载与升级
 
-从 1.0.0 升级时，在 DSH「插件」页卸载旧版并按上面的步骤安装 1.1.0，然后重启 DSH。在「设置 → 余额与额度 → 说明」确认版本。同一 profile 中的显示偏好通常会保留，清空浏览器站点数据会重置这些偏好。
+如果使用的插件管理器已经显示本包的更新提示，按提示确认升级。更新提示取决于该管理器的索引和包信息。Web 版可执行：
+
+```sh
+dsh plugin --profile web add dsh-balance-center@latest
+```
+
+桌面版优先在「插件」页更新，也可使用桌面应用安装的命令执行 `dsh plugin --profile desktop add dsh-balance-center@latest`。此前通过 Git tag 或本地 `.tgz` 安装的用户，可在「添加插件」中用 npm 包名替换安装来源。按提示重启 DSH，再到「设置 → 余额与额度 → 说明」确认版本。同一 profile 中的显示偏好通常会保留，清空浏览器站点数据会重置这些偏好。
+
+卸载时，在「插件」页移除 **dsh-balance-center**。Git 与离线安装入口继续在 [GitHub Releases](https://github.com/dan-cube/dsh-balance-center/releases/latest) 提供。
+
+关注新版本可在 GitHub 仓库选择 **Watch → Custom → Releases**。反馈安装问题时，请附 DSH 版本、操作系统、安装来源和已遮挡隐私的截图。[反馈问题](https://github.com/dan-cube/dsh-balance-center/issues)
 
 ## 隐私说明
 
